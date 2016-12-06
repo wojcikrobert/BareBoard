@@ -8,7 +8,7 @@ CCFLAGS = -Wall
 #linker
 LD = arm-none-eabi-gcc -o
 #linker flags
-LDFLAGS = -Wall
+LDFLAGS = -Wall --specs=nosys.specs 
 
 # directories
 SRCDIR = src
@@ -25,7 +25,7 @@ all: $(OBJECTS)
 	@echo "Linking complete!"
 	
 $(OBJDIR)\main.o : $(SRCDIR)\main.c
-	$(CC) $(CCFLAGS)-c $< -o $@
+	$(CC) $(CCFLAGS) -c $< -o $@
 	@echo "Object created: " $@ 
 	
 $(OBJDIR)\context_manager.o : $(SRCDIR)\context_manager.c $(SRCDIR)\context_manager.h

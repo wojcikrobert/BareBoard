@@ -1,13 +1,7 @@
-#include "context_manager.h"
+#include "ContextManager.h"
 
 
 int main(void){
 
 	SaveContext();
-}
-
-void exit(int code)
-{
-    while(1)
-    	;
 }
