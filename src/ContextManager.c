@@ -5,8 +5,9 @@
  *      Author: 502546347
  */
 
-void SaveContext(){
-	while (1){
+#include "ContextManager.h"
 
-	}
+CONTEXT ctx_table[255];
+
+void SaveContext(){
 }

@@ -5,78 +5,62 @@
  *      Author: 502546347
  */
 
-#include "BCM2837.h"
+#include "STM32F746NG.h"
+#include "DataTypes.h"
+#include "BoardSetup.h"
 
-/* define GPIO function selection registers */
-volatile GPFSEL_t* pGPIOSEL0 = GPFSEL0;
-volatile GPFSEL_t* pGPIOSEL1 = GPFSEL1;
-volatile GPFSEL_t* pGPIOSEL2 = GPFSEL2;
-volatile GPFSEL_t* pGPIOSEL3 = GPFSEL3;
-volatile GPFSEL_t* pGPIOSEL4 = GPFSEL4;
-volatile GPFSEL_t* pGPIOSEL5 = GPFSEL5;
+   BOOL InitBoard(void);
+   void SetOutput(OUTPUTS out, BOOL val);
+   void ReadInput(INPUTS in, BOOL* const val);
 
-/* define GPIO set/clear registers */
-volatile GPIOR0_t* pGPSET0 = GPSET0;
-volatile GPIOR1_t* pGPSET1 = GPSET1;
-volatile GPIOR0_t* pGPCLR0 = GPCLR0;
-volatile GPIOR1_t* pGPCLR1 = GPCLR1;
+	BOOL InitBoard(void){
 
-/* TODO: zadeklarowac pozostale wskazniki */
+	   BOOL InitResult = TRUE;
+		/* Pin PD14 is output LED [LD1], push-pull output, low speed, pull-up */
+	   MODIFY_REG(GPIOD->MODER,3 << GPIO_MODER_MODER14_SHIFT,1 << GPIO_MODER_MODER14_SHIFT);
+	   MODIFY_REG(GPIOD->OTYPER,1 << GPIO_OTYPER_OT_14_SHIFT,1 << GPIO_OTYPER_OT_14_SHIFT);
+	   MODIFY_REG(GPIOD->OSPEEDR,3 << GPIO_OSPEEDER_OSPEEDR14_SHIFT,0);
+	   MODIFY_REG(GPIOD->PUPDR,3 << GPIO_PUPDR_PUPDR14_SHIFT,0);
+	   /* Pin F3 is input pushbutton [B1], pull-down */
+      MODIFY_REG(GPIOF->MODER,3 << GPIO_MODER_MODER3_SHIFT,1 << GPIO_MODER_MODER3_SHIFT);
+      MODIFY_REG(GPIOF->PUPDR,3 << GPIO_PUPDR_PUPDR3_SHIFT,1 << GPIO_PUPDR_PUPDR3_SHIFT);
 
-int SetupGPIOs(void);
+	   /* TODO: Freeze GPIO registers after configuration */
 
-int InitBoard(void){
-	int result = 1;
-	/* GPIOs */
-	result &= SetupGPIOs();
+	   return InitResult;
+	}
 
-	return result;
-}
+	void SetOutput(OUTPUTS out, BOOL val){
+	   /* declare modifiers */
+	   GPIO_TypeDef* PortSelection = NULL;
+	   uint32_t Shift = 0;
+	   switch(out){
+	      case LD1:
+	         /* set modifiers */
+	         PortSelection = GPIOD;
+	         Shift = GPIO_ODR_ODR_14_SHIFT;
+	         break;
+	   }
 
-int SetupGPIOs(void){
-	int result = 1;
+	   /* if selection was done update output register */
+      if(PortSelection != NULL){
+	      MODIFY_REG(PortSelection->ODR,1<<Shift,val<<Shift);
+	   }
+	}
 
-	/* setup GPIO functions
-	   Possible options
-
-	   000 = GPIO Pin 9 is an input
-  	   001 = GPIO Pin 9 is an output
-	   100 = GPIO Pin 9 takes alternate function 0
-	   101 = GPIO Pin 9 takes alternate function 1
-	   110 = GPIO Pin 9 takes alternate function 2
-	   111 = GPIO Pin 9 takes alternate function 3
-	   011 = GPIO Pin 9 takes alternate function 4
-	   010 = GPIO Pin 9 takes alternate function 5
-	 */
-
-	/*   GPIO Bank 0
-	   	   TO DO:
-	 */
-
-	/* GPIO Bank 1
-	   	   PIN6 is an output
-	 */
-	(*pGPIOSEL1).FSELx6 = 0b001;
-	/* GPIO Bank 2
-	   	   TO DO:
-	 */
-
-	/* GPIO Bank 3
-	   	   TO DO:
-	 */
-
-	/* GPIO Bank 4
-	   	   TO DO:
-	 */
-
-	/* GPIO Bank 5
-	   	   TO DO:
-	 */
-
-	/* GPIO Bank 6
-	   	   TO DO:
-	 */
-
-	return result;
-}
-
+	void ReadInput(INPUTS in, BOOL* const val){
+      /* declare modifiers */
+      GPIO_TypeDef* PortSelection = NULL;
+      uint32_t Shift = 0;
+      switch(in){
+         case B1:
+            /* set modifiers */
+            PortSelection = GPIOF;
+            Shift = GPIO_IDR_IDR_3_SHIFT;
+            break;
+      }
+      /* if selection was done read register */
+      if(PortSelection != NULL){
+         *val = READ_BIT(PortSelection->IDR,Shift);
+      }
+   }

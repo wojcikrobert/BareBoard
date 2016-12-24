@@ -32,8 +32,11 @@
 	} CONTEXT;
 
 
-	CONTEXT ctx_table[255];
+	extern CONTEXT ctx_table[255];
 
 void SaveContext(void);
+
+//int setjmp(jmp_buf env);
+//int longjmp(jmp_buf env);
 
 #endif

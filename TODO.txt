@@ -1,0 +1,17 @@
+
+* buy usb wire for st link
+
+* debuger instalation and configuration: openocd, st link cli
+
+* interrupt vectors table definition
+
+* boot, entry point
+
+* setjmp.h
+- setjmp, longjmp
+
+* stdio
+- memory manager, malloc, calloc, zalloc, free
+
+* README:
+- description of used tools, IDE, documentation etc
