@@ -1,0 +1,93 @@
+
+obj/main.o:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <main>:
+#include "BoardSetup.h"
+#include "DataTypes.h"
+
+jmp_buf  env;
+
+int main(void){
+   0:	e92d4810 	push	{r4, fp, lr}
+   4:	e28db008 	add	fp, sp, #8
+   8:	e24dd03c 	sub	sp, sp, #60	; 0x3c
+
+   if(TRUE == InitBoard()){
+   c:	ebfffffe 	bl	0 <InitBoard>
+  10:	e1a03000 	mov	r3, r0
+  14:	e3530001 	cmp	r3, #1
+  18:	1a000024 	bne	b0 <main+0xb0>
+
+      SaveContext();
+  1c:	ebfffffe 	bl	0 <SaveContext>
+      if(setjmp(env)){
+  20:	e59f409c 	ldr	r4, [pc, #156]	; c4 <main+0xc4>
+  24:	e1a0e00d 	mov	lr, sp
+  28:	e284c010 	add	ip, r4, #16
+  2c:	e8bc000f 	ldm	ip!, {r0, r1, r2, r3}
+  30:	e8ae000f 	stmia	lr!, {r0, r1, r2, r3}
+  34:	e8bc000f 	ldm	ip!, {r0, r1, r2, r3}
+  38:	e8ae000f 	stmia	lr!, {r0, r1, r2, r3}
+  3c:	e8bc000f 	ldm	ip!, {r0, r1, r2, r3}
+  40:	e8ae000f 	stmia	lr!, {r0, r1, r2, r3}
+  44:	e59c3000 	ldr	r3, [ip]
+  48:	e58e3000 	str	r3, [lr]
+  4c:	e894000f 	ldm	r4, {r0, r1, r2, r3}
+  50:	ebfffffe 	bl	0 <setjmp>
+  54:	e1a03000 	mov	r3, r0
+  58:	e3530000 	cmp	r3, #0
+  5c:	0a000003 	beq	70 <main+0x70>
+         SetOutput(LD1,TRUE);
+  60:	e3a01001 	mov	r1, #1
+  64:	e3a00000 	mov	r0, #0
+  68:	ebfffffe 	bl	0 <SetOutput>
+  6c:	ea00000e 	b	ac <main+0xac>
+      }
+      else{
+         longjmp(env,1);
+  70:	e59f404c 	ldr	r4, [pc, #76]	; c4 <main+0xc4>
+  74:	e3a03001 	mov	r3, #1
+  78:	e58d3034 	str	r3, [sp, #52]	; 0x34
+  7c:	e1a0e00d 	mov	lr, sp
+  80:	e284c010 	add	ip, r4, #16
+  84:	e8bc000f 	ldm	ip!, {r0, r1, r2, r3}
+  88:	e8ae000f 	stmia	lr!, {r0, r1, r2, r3}
+  8c:	e8bc000f 	ldm	ip!, {r0, r1, r2, r3}
+  90:	e8ae000f 	stmia	lr!, {r0, r1, r2, r3}
+  94:	e8bc000f 	ldm	ip!, {r0, r1, r2, r3}
+  98:	e8ae000f 	stmia	lr!, {r0, r1, r2, r3}
+  9c:	e59c3000 	ldr	r3, [ip]
+  a0:	e58e3000 	str	r3, [lr]
+  a4:	e894000f 	ldm	r4, {r0, r1, r2, r3}
+  a8:	ebfffffe 	bl	0 <longjmp>
+      }
+      while(1){
+         /* TODO: Light LED when button is pressed. */
+      }
+  ac:	eafffffe 	b	ac <main+0xac>
+  b0:	e3a03000 	mov	r3, #0
+   }
+   else{
+
+   }
+}
+  b4:	e1a00003 	mov	r0, r3
+  b8:	e24bd008 	sub	sp, fp, #8
+  bc:	e8bd4810 	pop	{r4, fp, lr}
+  c0:	e12fff1e 	bx	lr
+  c4:	00000000 	.word	0x00000000
+
+000000c8 <_exit>:
+
+void _exit(int status)
+{
+  c8:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
+  cc:	e28db000 	add	fp, sp, #0
+  d0:	e24dd00c 	sub	sp, sp, #12
+  d4:	e50b0008 	str	r0, [fp, #-8]
+   /* it shall not get here */
+   while (1);
+  d8:	eafffffe 	b	d8 <_exit+0x10>

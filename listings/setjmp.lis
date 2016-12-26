@@ -1,0 +1,44 @@
+
+obj/setjmp.o:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <setjmp>:
+.global setjmp
+setjmp:                                      /* R0 points to jmp_buf env */
+   stm      r0!,{r0-r12,sp,lr}               /* store registers */
+   0:	e8a07fff 	stmia	r0!, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, sp, lr}
+   mrs      r1,spsr                          /* store special registers spsr,cpsr */
+   4:	e14f1000 	mrs	r1, SPSR
+   mrs      r2,cpsr
+   8:	e10f2000 	mrs	r2, CPSR
+   stm      r0!,{r1,r2}
+   c:	e8a00006 	stmia	r0!, {r1, r2}
+   mov      r0,#0                            /* return 0 (FALSE) */
+  10:	e3a00000 	mov	r0, #0
+   bx       lr                               /* return */
+  14:	e12fff1e 	bx	lr
+
+00000018 <longjmp>:
+
+.global longjmp
+longjmp:                                     /* R0 points to jmp_buf env */
+                                             /* R1 points to value that is going to be returned (int) */
+                                             /* R0 is used to return value */
+   ldm      r0!,{r2-r12,sp,lr}               /* restore registers starting from r2 */
+  18:	e8b07ffc 	ldm	r0!, {r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, sp, lr}
+   push     {r1,r2}                          /* store value */
+  1c:	e92d0006 	push	{r1, r2}
+   ldm      r0!,{r1,r2}                      /* restore special registers spsr,cpsr */
+  20:	e8b00006 	ldm	r0!, {r1, r2}
+   msr      spsr,r1
+  24:	e169f001 	msr	SPSR_fc, r1
+   msr      cpsr,r2
+  28:	e129f002 	msr	CPSR_fc, r2
+   ldr      r1,[r0,#4]                       /* restore r1 */
+  2c:	e5901004 	ldr	r1, [r0, #4]
+   pop      {r0,r2}                          /* use value as returned value and restore r2 */
+  30:	e8bd0005 	pop	{r0, r2}
+   bx       lr                               /* return */
+  34:	e12fff1e 	bx	lr

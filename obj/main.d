@@ -1,1 +1,2 @@
-main.o: src/main.c src/ContextManager.h src/DataTypes.h src/BoardSetup.h
+main.o: src/main.c src/setjmp.h src/DataTypes.h src/ContextManager.h \
+ src/BoardSetup.h

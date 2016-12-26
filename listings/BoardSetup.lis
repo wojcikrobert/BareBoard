@@ -1,0 +1,188 @@
+
+obj/BoardSetup.o:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <InitBoard>:
+
+   BOOL InitBoard(void);
+   void SetOutput(OUTPUTS out, BOOL val);
+   void ReadInput(INPUTS in, BOOL* const val);
+
+	BOOL InitBoard(void){
+   0:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
+   4:	e28db000 	add	fp, sp, #0
+   8:	e24dd00c 	sub	sp, sp, #12
+
+	   BOOL InitResult = TRUE;
+   c:	e3a03001 	mov	r3, #1
+  10:	e54b3005 	strb	r3, [fp, #-5]
+		/* Pin PD14 is output LED [LD1], push-pull output, low speed, pull-up */
+	   MODIFY_REG(GPIOD->MODER,3 << GPIO_MODER_MODER14_SHIFT,1 << GPIO_MODER_MODER14_SHIFT);
+  14:	e59f2090 	ldr	r2, [pc, #144]	; ac <InitBoard+0xac>
+  18:	e59f308c 	ldr	r3, [pc, #140]	; ac <InitBoard+0xac>
+  1c:	e5933000 	ldr	r3, [r3]
+  20:	e3c33203 	bic	r3, r3, #805306368	; 0x30000000
+  24:	e3833201 	orr	r3, r3, #268435456	; 0x10000000
+  28:	e5823000 	str	r3, [r2]
+	   MODIFY_REG(GPIOD->OTYPER,1 << GPIO_OTYPER_OT_14_SHIFT,1 << GPIO_OTYPER_OT_14_SHIFT);
+  2c:	e59f2078 	ldr	r2, [pc, #120]	; ac <InitBoard+0xac>
+  30:	e59f3074 	ldr	r3, [pc, #116]	; ac <InitBoard+0xac>
+  34:	e5933004 	ldr	r3, [r3, #4]
+  38:	e3833901 	orr	r3, r3, #16384	; 0x4000
+  3c:	e5823004 	str	r3, [r2, #4]
+	   MODIFY_REG(GPIOD->OSPEEDR,3 << GPIO_OSPEEDER_OSPEEDR14_SHIFT,0);
+  40:	e59f2064 	ldr	r2, [pc, #100]	; ac <InitBoard+0xac>
+  44:	e59f3060 	ldr	r3, [pc, #96]	; ac <InitBoard+0xac>
+  48:	e5933008 	ldr	r3, [r3, #8]
+  4c:	e3c33203 	bic	r3, r3, #805306368	; 0x30000000
+  50:	e5823008 	str	r3, [r2, #8]
+	   MODIFY_REG(GPIOD->PUPDR,3 << GPIO_PUPDR_PUPDR14_SHIFT,0);
+  54:	e59f2050 	ldr	r2, [pc, #80]	; ac <InitBoard+0xac>
+  58:	e59f304c 	ldr	r3, [pc, #76]	; ac <InitBoard+0xac>
+  5c:	e593300c 	ldr	r3, [r3, #12]
+  60:	e3c33203 	bic	r3, r3, #805306368	; 0x30000000
+  64:	e582300c 	str	r3, [r2, #12]
+	   /* Pin F3 is input pushbutton [B1], pull-down */
+      MODIFY_REG(GPIOF->MODER,3 << GPIO_MODER_MODER3_SHIFT,1 << GPIO_MODER_MODER3_SHIFT);
+  68:	e59f2040 	ldr	r2, [pc, #64]	; b0 <InitBoard+0xb0>
+  6c:	e59f303c 	ldr	r3, [pc, #60]	; b0 <InitBoard+0xb0>
+  70:	e5933000 	ldr	r3, [r3]
+  74:	e3c330c0 	bic	r3, r3, #192	; 0xc0
+  78:	e3833040 	orr	r3, r3, #64	; 0x40
+  7c:	e5823000 	str	r3, [r2]
+      MODIFY_REG(GPIOF->PUPDR,3 << GPIO_PUPDR_PUPDR3_SHIFT,1 << GPIO_PUPDR_PUPDR3_SHIFT);
+  80:	e59f2028 	ldr	r2, [pc, #40]	; b0 <InitBoard+0xb0>
+  84:	e59f3024 	ldr	r3, [pc, #36]	; b0 <InitBoard+0xb0>
+  88:	e593300c 	ldr	r3, [r3, #12]
+  8c:	e3c330c0 	bic	r3, r3, #192	; 0xc0
+  90:	e3833040 	orr	r3, r3, #64	; 0x40
+  94:	e582300c 	str	r3, [r2, #12]
+
+	   /* TODO: Freeze GPIO registers after configuration */
+
+	   return InitResult;
+  98:	e55b3005 	ldrb	r3, [fp, #-5]
+	}
+  9c:	e1a00003 	mov	r0, r3
+  a0:	e24bd000 	sub	sp, fp, #0
+  a4:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
+  a8:	e12fff1e 	bx	lr
+  ac:	40020c00 	.word	0x40020c00
+  b0:	40021400 	.word	0x40021400
+
+000000b4 <SetOutput>:
+
+	void SetOutput(OUTPUTS out, BOOL val){
+  b4:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
+  b8:	e28db000 	add	fp, sp, #0
+  bc:	e24dd014 	sub	sp, sp, #20
+  c0:	e1a03000 	mov	r3, r0
+  c4:	e1a02001 	mov	r2, r1
+  c8:	e54b300d 	strb	r3, [fp, #-13]
+  cc:	e1a03002 	mov	r3, r2
+  d0:	e54b300e 	strb	r3, [fp, #-14]
+	   /* declare modifiers */
+	   GPIO_TypeDef* PortSelection = NULL;
+  d4:	e3a03000 	mov	r3, #0
+  d8:	e50b3008 	str	r3, [fp, #-8]
+	   uint32_t Shift = 0;
+  dc:	e3a03000 	mov	r3, #0
+  e0:	e50b300c 	str	r3, [fp, #-12]
+	   switch(out){
+  e4:	e55b300d 	ldrb	r3, [fp, #-13]
+  e8:	e3530000 	cmp	r3, #0
+  ec:	1a000004 	bne	104 <SetOutput+0x50>
+	      case LD1:
+	         /* set modifiers */
+	         PortSelection = GPIOD;
+  f0:	e59f305c 	ldr	r3, [pc, #92]	; 154 <SetOutput+0xa0>
+  f4:	e50b3008 	str	r3, [fp, #-8]
+	         Shift = GPIO_ODR_ODR_14_SHIFT;
+  f8:	e3a0300e 	mov	r3, #14
+  fc:	e50b300c 	str	r3, [fp, #-12]
+	         break;
+ 100:	e1a00000 	nop			; (mov r0, r0)
+	   }
+
+	   /* if selection was done update output register */
+      if(PortSelection != NULL){
+ 104:	e51b3008 	ldr	r3, [fp, #-8]
+ 108:	e3530000 	cmp	r3, #0
+ 10c:	0a00000c 	beq	144 <SetOutput+0x90>
+	      MODIFY_REG(PortSelection->ODR,1<<Shift,val<<Shift);
+ 110:	e51b3008 	ldr	r3, [fp, #-8]
+ 114:	e5933014 	ldr	r3, [r3, #20]
+ 118:	e3a01001 	mov	r1, #1
+ 11c:	e51b200c 	ldr	r2, [fp, #-12]
+ 120:	e1a02211 	lsl	r2, r1, r2
+ 124:	e1e02002 	mvn	r2, r2
+ 128:	e0033002 	and	r3, r3, r2
+ 12c:	e55b100e 	ldrb	r1, [fp, #-14]
+ 130:	e51b200c 	ldr	r2, [fp, #-12]
+ 134:	e1a02211 	lsl	r2, r1, r2
+ 138:	e1832002 	orr	r2, r3, r2
+ 13c:	e51b3008 	ldr	r3, [fp, #-8]
+ 140:	e5832014 	str	r2, [r3, #20]
+	   }
+	}
+ 144:	e1a00000 	nop			; (mov r0, r0)
+ 148:	e24bd000 	sub	sp, fp, #0
+ 14c:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
+ 150:	e12fff1e 	bx	lr
+ 154:	40020c00 	.word	0x40020c00
+
+00000158 <ReadInput>:
+
+	void ReadInput(INPUTS in, BOOL* const val){
+ 158:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
+ 15c:	e28db000 	add	fp, sp, #0
+ 160:	e24dd014 	sub	sp, sp, #20
+ 164:	e1a03000 	mov	r3, r0
+ 168:	e50b1014 	str	r1, [fp, #-20]	; 0xffffffec
+ 16c:	e54b300d 	strb	r3, [fp, #-13]
+      /* declare modifiers */
+      GPIO_TypeDef* PortSelection = NULL;
+ 170:	e3a03000 	mov	r3, #0
+ 174:	e50b3008 	str	r3, [fp, #-8]
+      uint32_t Shift = 0;
+ 178:	e3a03000 	mov	r3, #0
+ 17c:	e50b300c 	str	r3, [fp, #-12]
+      switch(in){
+ 180:	e55b300d 	ldrb	r3, [fp, #-13]
+ 184:	e3530000 	cmp	r3, #0
+ 188:	1a000004 	bne	1a0 <ReadInput+0x48>
+         case B1:
+            /* set modifiers */
+            PortSelection = GPIOF;
+ 18c:	e59f304c 	ldr	r3, [pc, #76]	; 1e0 <ReadInput+0x88>
+ 190:	e50b3008 	str	r3, [fp, #-8]
+            Shift = GPIO_IDR_IDR_3_SHIFT;
+ 194:	e3a03003 	mov	r3, #3
+ 198:	e50b300c 	str	r3, [fp, #-12]
+            break;
+ 19c:	e1a00000 	nop			; (mov r0, r0)
+      }
+      /* if selection was done read register */
+      if(PortSelection != NULL){
+ 1a0:	e51b3008 	ldr	r3, [fp, #-8]
+ 1a4:	e3530000 	cmp	r3, #0
+ 1a8:	0a000008 	beq	1d0 <ReadInput+0x78>
+         *val = READ_BIT(PortSelection->IDR,Shift);
+ 1ac:	e51b3008 	ldr	r3, [fp, #-8]
+ 1b0:	e5933010 	ldr	r3, [r3, #16]
+ 1b4:	e20320ff 	and	r2, r3, #255	; 0xff
+ 1b8:	e51b300c 	ldr	r3, [fp, #-12]
+ 1bc:	e20330ff 	and	r3, r3, #255	; 0xff
+ 1c0:	e0033002 	and	r3, r3, r2
+ 1c4:	e20320ff 	and	r2, r3, #255	; 0xff
+ 1c8:	e51b3014 	ldr	r3, [fp, #-20]	; 0xffffffec
+ 1cc:	e5c32000 	strb	r2, [r3]
+      }
+   }
+ 1d0:	e1a00000 	nop			; (mov r0, r0)
+ 1d4:	e24bd000 	sub	sp, fp, #0
+ 1d8:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
+ 1dc:	e12fff1e 	bx	lr
+ 1e0:	40021400 	.word	0x40021400

@@ -1,9 +1,16 @@
 TARGET = BareBoard
 
+#obj dump
+DUMP = arm-none-eabi-objdump
+#dump flags
+DUMPFLAGS = -S
+
 # compiler
 CC = arm-none-eabi-gcc
+AS = arm-none-eabi-as
 # compiling flags
-CCFLAGS = -Wall
+ASFLAGS = -Wall -ggdb
+CCFLAGS = -Wall -ggdb
 
 #linker
 LD = arm-none-eabi-gcc -o
@@ -14,9 +21,13 @@ LDFLAGS = -Wall -T stm32.ld
 SRCDIR = src
 OBJDIR = obj
 BINDIR = bin
+LISDIR = listings
 
-SRC := $(wildcard $(SRCDIR)/*.c)
-OBJECTS := $(subst $(SRCDIR),$(OBJDIR),$(SRC:%.c=%.o))
+SRCA := $(wildcard $(SRCDIR)/*.s)
+SRCC := $(wildcard $(SRCDIR)/*.c)
+OBJECTSA := $(subst $(SRCDIR),$(OBJDIR),$(SRCA:%.s=%.o))
+OBJECTSC := $(subst $(SRCDIR),$(OBJDIR),$(SRCC:%.c=%.o))
+OBJECTS := $(OBJECTSA) $(OBJECTSC)
 
 rm       = rm -f
 
@@ -28,7 +39,14 @@ all:$(OBJECTS)
 # compilation rules
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(CCFLAGS) -c $< -o $@
-	$(CC) -MM $(CFLAGS) $< > $(OBJDIR)/$*.d
+	$(CC) -MM $(CCFLAGS) $< > $(OBJDIR)/$*.d
+	$(DUMP) $(DUMPFLAGS) $@  > $(LISDIR)/$*.lis
+	@echo "Object created: " $@
+	
+$(OBJDIR)/%.o : $(SRCDIR)/%.s
+	$(AS) $(ASFLAGS) -c $< -o $@
+	$(AS) -MM $(ASFLAGS) $< > $(OBJDIR)/$*.d
+	$(DUMP) $(DUMPFLAGS) $@  > $(LISDIR)/$*.lis
 	@echo "Object created: " $@ 
 
 #clean up rules

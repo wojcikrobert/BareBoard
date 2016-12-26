@@ -1,3 +1,5 @@
+TODO:
+* -MM compilation option
 
 * buy usb wire for st link
 
@@ -7,11 +9,18 @@
 
 * boot, entry point
 
-* setjmp.h
-- setjmp, longjmp
-
 * stdio
 - memory manager, malloc, calloc, zalloc, free
 
 * README:
 - description of used tools, IDE, documentation etc
+
+* how to split functions to a separate files (same as sources)
+
+TOVERIFY
+
+* setjmp.h
+- setjmp, longjmp
+
+DONE
+* listings fixed, compilation with debug data

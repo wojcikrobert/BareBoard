@@ -26,7 +26,6 @@
 		uint32_t R12;
 		uint32_t SP;
 		uint32_t LR;
-		uint32_t PC;
 		uint32_t CPSR;
 		uint32_t SPSR;
 	} CONTEXT;
