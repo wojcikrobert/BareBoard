@@ -1,13 +1,14 @@
+/*#include "DataTypes.h"
+#include "BoardSetup.h"
 #include "setjmp.h"
 #include "ContextManager.h"
-#include "BoardSetup.h"
-#include "DataTypes.h"
 
 jmp_buf  env;
+*/
 
-int main(void){
+int main(void) {
 
-   if(TRUE == InitBoard()){
+   /*if(TRUE == InitBoard()){
 
       SaveContext();
       if(setjmp(env)){
@@ -17,16 +18,10 @@ int main(void){
          longjmp(env,1);
       }
       while(1){
-         /* TODO: Light LED when button is pressed. */
       }
    }
    else{
 
-   }
-}
-
-void _exit(int status)
-{
-   /* it shall not get here */
-   while (1);
+   }*/
+   return -1;
 }

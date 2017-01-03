@@ -10,7 +10,7 @@ Disassembly of section .text:
    void SetOutput(OUTPUTS out, BOOL val);
    void ReadInput(INPUTS in, BOOL* const val);
 
-	BOOL InitBoard(void){
+   BOOL InitBoard(void){
    0:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
    4:	e28db000 	add	fp, sp, #0
    8:	e24dd00c 	sub	sp, sp, #12
@@ -74,7 +74,7 @@ Disassembly of section .text:
 
 000000b4 <SetOutput>:
 
-	void SetOutput(OUTPUTS out, BOOL val){
+   void SetOutput(OUTPUTS out, BOOL val){
   b4:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
   b8:	e28db000 	add	fp, sp, #0
   bc:	e24dd014 	sub	sp, sp, #20

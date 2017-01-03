@@ -1,0 +1,31 @@
+
+obj/startup_stm32f4xx.o:     file format elf32-littlearm
+
+
+Disassembly of section .after_vectors:
+
+00000000 <ADC_IRQHandler>:
+   SPDIF_RX_IRQHandler,               // SPDIF_RX
+};
+
+void __attribute__ ((section(".after_vectors")))
+Default_Handler(void)
+{
+   0:	b480      	push	{r7}
+   2:	af00      	add	r7, sp, #0
+   4:	e7fe      	b.n	4 <ADC_IRQHandler+0x4>
+   6:	bf00      	nop
+
+00000008 <_start>:
+   8:	b580      	push	{r7, lr}
+   a:	b082      	sub	sp, #8
+   c:	af00      	add	r7, sp, #0
+   e:	f7ff fffe 	bl	0 <main>
+  12:	6078      	str	r0, [r7, #4]
+  14:	e7fe      	b.n	14 <_start+0xc>
+  16:	bf00      	nop
+
+00000018 <Reset_Handler>:
+  18:	b580      	push	{r7, lr}
+  1a:	af00      	add	r7, sp, #0
+  1c:	f7ff fffe 	bl	8 <_start>

@@ -1,13 +1,23 @@
 TODO:
 * -MM compilation option
 
-* buy usb wire for st link
+* led program run
 
-* debuger instalation and configuration: openocd, st link cli
+* boot
 
-* interrupt vectors table definition
+* bss init
 
-* boot, entry point
+* flash to ram copy
+
+* automatically remove a.out file (maybe not even create it somehow).
+
+* openocd: how to stop communication ?
+
+* VTOR setup
+
+* Separate binary for bootloader
+
+* How to load two binaries at once ?
 
 * stdio
 - memory manager, malloc, calloc, zalloc, free
@@ -15,12 +25,18 @@ TODO:
 * README:
 - description of used tools, IDE, documentation etc
 
-* how to split functions to a separate files (same as sources)
-
 TOVERIFY
-
 * setjmp.h
 - setjmp, longjmp
 
 DONE
-* listings fixed, compilation with debug data
+* compilation with debug data
+* listings
+* split listings to a separate files (same as sources)
+* buy usb wire for st link
+* map file -Wl,-Map=output.map
+* symbols table
+* interrupt vectors table definition
+* entry point
+* debuger instalation and configuration: openocd, gdb
+* remove unnecessary functions added by compiler (-nostartfiles, nostdlib)
